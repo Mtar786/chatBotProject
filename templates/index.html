@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat with Buddy</title>
+</head>
+<body>
+    <h1>Chat with Buddy</h1>
+    <div id="chatbox"></div>
+    <input type="text" id="userInput" placeholder="Type your message here">
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+        function sendMessage() {
+            var userMsg = document.getElementById("userInput").value;
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/get", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var chatbox = document.getElementById("chatbox");
+                    chatbox.innerHTML += "<p><strong>You:</strong> " + userMsg + "</p>";
+                    chatbox.innerHTML += "<p><strong>Buddy:</strong> " + xhr.responseText + "</p>";
+                    document.getElementById("userInput").value = "";
+                }
+            }
+            xhr.send("msg=" + encodeURIComponent(userMsg));
+        }
+    </script>
+</body>
+</html>
